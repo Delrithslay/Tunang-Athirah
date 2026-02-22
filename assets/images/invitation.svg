@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffeef6"/>
+      <stop offset="1" stop-color="#fff7f3"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <g transform="translate(60,60)">
+    <rect width="680" height="480" rx="18" fill="#fff" stroke="#f3c2dc" stroke-width="4"/>
+    <text x="340" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#c86b9e">Jemputan Pertunangan</text>
+    <text x="340" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#666">Kami menjemput anda ke majlis pertunangan Athirah</text>
+    <circle cx="170" cy="360" r="40" fill="#f6e7ee" stroke="#f0c0dc"/>
+    <circle cx="520" cy="360" r="40" fill="#f6e7ee" stroke="#f0c0dc"/>
+  </g>
+</svg>

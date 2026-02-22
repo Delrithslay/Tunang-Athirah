@@ -1,0 +1,188 @@
+/* Extracted styles from invitation HTML */
+:root {
+  --barbie-pink: #f8c8dc;
+  --barbie-dark-pink: #e0218a;
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.6);
+  --magic-purple: #e6e6fa;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: 'Montserrat', sans-serif;
+  background-color: #fffafb;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.font-serif-elegant{font-family: 'Playfair Display', serif;}
+.font-script{font-family: 'Great Vibes', cursive;}
+
+.bg-magic-gradient{
+  background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #fce4ec 100%);
+}
+
+/* Sparkle container */
+#magic-container{
+  position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; overflow:hidden;
+}
+
+.continuous-sparkle{
+  position:absolute; background:white; border-radius:50%; filter:blur(1px);
+  box-shadow: 0 0 5px 1px rgba(255,255,255,0.8), 0 0 10px 2px rgba(212,175,55,0.4);
+  animation: float-up var(--speed) linear infinite, twinkle 2s ease-in-out infinite;
+  opacity:0;
+}
+
+@keyframes float-up{ 0%{transform:translateY(110vh) translateX(0); opacity:0} 10%{opacity:.8} 90%{opacity:.8} 100%{transform:translateY(-10vh) translateX(var(--drift)); opacity:0} }
+@keyframes twinkle{0%,100%{transform:scale(1)}50%{transform:scale(1.4); opacity:1}}
+
+/* UI elements */
+.castle-overlay{ position:absolute; inset:0; z-index:8; background-image: url('assets/images/magical.jpeg'); background-size:cover; background-position:center; background-repeat:no-repeat; filter:brightness(1) contrast(1.03); opacity:0.36 }
+.glass-morphism{ background: rgba(255,255,255,0.55); backdrop-filter: blur(10px); border:1px solid rgba(212,175,55,0.22); box-shadow: 0 8px 20px 0 rgba(224,33,138,0.08)}
+
+#music-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(248,200,220,0.98); z-index:2000; display:flex; flex-direction:column; justify-content:center; align-items:center; transition:opacity 1s ease-out }
+.magic-button{ background: linear-gradient(45deg, #e0218a, #ff80b3); box-shadow: 0 0 20px rgba(224,33,138,0.4) }
+
+.magic-lily-logo{ width:160px; height:160px; margin:0 auto 30px; position:relative; display:flex; align-items:center; justify-content:center }
+.lily-glow{ position:absolute; width:100%; height:100%; background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%); animation: pulse-glow 4s ease-in-out infinite }
+@keyframes pulse-glow{0%,100%{transform:scale(.8); opacity:.5}50%{transform:scale(1.2); opacity:.8}}
+.lily-svg{ position:relative; z-index:10; filter: drop-shadow(0 0 8px rgba(212,175,55,0.8)); animation: rotate-lily 20s linear infinite }
+@keyframes rotate-lily{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.monogram-overlay{ position:absolute; z-index:20; font-family:'Great Vibes', cursive; color:var(--e0218a); font-size:2.8rem; text-shadow: 0 0 10px white, 0 0 20px white; background: linear-gradient(to bottom, #e0218a, #ff69b4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:5px }
+
+.animate-float-slow{ animation: float-slow 8s ease-in-out infinite }
+@keyframes float-slow{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+
+/* small helpers for layout used in template */
+.text-center{ text-align:center }
+.shadow-2xl{ box-shadow: 0 25px 50px rgba(0,0,0,0.12) }
+
+/* View-specific tweaks */
+.phone-view .magic-lily-logo{ transform: scale(0.45) !important; }
+.phone-view .font-script{ font-size: 2.2rem; }
+.phone-view .font-serif-elegant{ font-size: 1.1rem; }
+.phone-view .magic-lily-logo, .phone-view .lily-glow, .phone-view .lily-svg{ filter: none; animation: none }
+.phone-view .glass-morphism{ padding: 1.5rem !important; }
+.phone-view .font-script.text-6xl{ font-size: 2.8rem !important; line-height: 1.05 !important }
+.phone-view .font-script.text-8xl{ font-size: 3.2rem !important }
+.phone-view .castle-overlay{ opacity: 0.28 }
+.phone-view #music-overlay{ background: rgba(248,200,220,0.95); }
+
+.webview .magic-lily-logo{ transform: scale(0.8) }
+.webview .font-script.text-6xl{ font-size: 4rem }
+.webview .font-script.text-8xl{ font-size: 5rem }
+
+/* If in-app webview, reduce heavy animations and simplify layout for performance */
+.webview .continuous-sparkle, .phone-view .continuous-sparkle{ animation: float-up 18s linear infinite, twinkle 3s ease-in-out infinite; }
+.webview .lily-svg{ animation: none }
+
+@media (max-width: 640px){
+  /* additional phone fallbacks */
+  .font-script.text-6xl{ font-size: 2.8rem !important }
+  .font-script.text-8xl{ font-size: 3.6rem !important }
+}
+
+/* Pixie dust inside opening card */
+.pixie-container{ position:absolute; inset:0; pointer-events:none; z-index:20; overflow:hidden }
+.pixie-particle{ position:absolute; width:6px; height:6px; border-radius:50%; filter:blur(.6px); opacity:0; transform:translateY(0); box-shadow:0 0 6px rgba(255,230,200,0.9); }
+
+@keyframes pixie-float {
+  0% { transform: translateY(30px) scale(0.6); opacity: 0 }
+  10% { opacity: 1 }
+  50% { transform: translateY(-40vh) scale(1.0); opacity: 0.9 }
+  100% { transform: translateY(-48vh) scale(0.8); opacity: 0 }
+}
+
+@keyframes pixie-twinkle {
+  0%,100% { opacity: 0.6; transform: scale(1) }
+  50% { opacity: 1; transform: scale(1.6) }
+}
+
+.pixie-particle.sparkle { box-shadow: 0 0 10px rgba(212,175,55,0.9); }
+.pixie-particle.pink { background: radial-gradient(circle at 30% 30%, #ffd6ea, #ff80b3); }
+.pixie-particle.gold { background: radial-gradient(circle at 30% 30%, #fff6d6, #d4af37); }
+.pixie-particle.white { background: radial-gradient(circle at 30% 30%, #ffffff, #fff7f3); }
+
+/* Opening card sizing to make it bigger and prominent */
+#opening-card{ width: min(420px, 86vw); max-width: 520px; padding: 2.25rem; border-radius: 24px; }
+
+/* Butterfly styles */
+.butterfly-container{ position:absolute; inset:0; pointer-events:none; z-index:22; overflow:visible }
+.butterfly{ position:absolute; width:46px; height:46px; background-size:contain; background-repeat:no-repeat; transform-origin:center; will-change:transform, opacity; opacity:0 }
+
+@keyframes fly-up {
+  0% { transform: translateY(20px) translateX(0) rotate(0deg) scale(0.7); opacity:0 }
+  10% { opacity:1 }
+  50% { transform: translateY(-60%) translateX(30px) rotate(12deg) scale(1); opacity:0.95 }
+  100% { transform: translateY(-120%) translateX(-20px) rotate(-18deg) scale(0.9); opacity:0 }
+}
+
+@keyframes flutter { 0%{ transform: rotate(-8deg) } 50%{ transform: rotate(8deg) } 100%{ transform: rotate(-8deg) } }
+
+.butterfly.flap{ animation: flutter 0.6s ease-in-out infinite; }
+
+/* Larger, denser pixie particles */
+.pixie-particle{ box-shadow:0 0 8px rgba(255,230,200,0.95); }
+.pixie-particle.large { width:9px; height:9px }
+
+/* Typography enhancements: make headings larger and more readable */
+h1.font-script{ font-size: 4rem !important; }
+#opening-card h2.font-script{ font-size: 2.8rem !important; }
+#opening-card p{ font-size: 1.05rem; }
+.font-serif-elegant{ font-size: 1.18rem; }
+
+@media (max-width: 480px){
+  h1.font-script{ font-size: 3.2rem !important; }
+  #opening-card h2.font-script{ font-size: 2.2rem !important; }
+  .font-serif-elegant{ font-size: 1rem; }
+}
+
+/* Opening-pin (black circle) placed at top center of opening card */
+.opening-sun{ position:absolute; top:-28px; left:50%; transform:translateX(-50%); width:64px; height:64px; z-index:40; display:flex; align-items:center; justify-content:center; pointer-events:none }
+.opening-sun svg{ filter: drop-shadow(0 10px 18px rgba(212,175,55,0.25)); border-radius:50% }
+
+@media (max-width:640px){
+  .opening-sun{ width:48px; height:48px; top:-20px }
+  .opening-sun svg{ width:48px; height:48px }
+}
+
+/* Mute button */
+.mute-btn{ position:fixed; top:18px; right:18px; z-index:3000; background: linear-gradient(180deg,#ffffffee,#fff0f6); border:1px solid rgba(224,33,138,0.06); color:var(--barbie-dark-pink); padding:10px; width:48px; height:48px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 8px 30px rgba(224,33,138,0.08); cursor:pointer; transition:all .28s ease }
+.mute-btn svg{ width:22px; height:22px; display:block }
+.mute-btn[aria-pressed="true"]{ background: linear-gradient(45deg,#e0218a,#ff6fa6); color:white; box-shadow:0 12px 36px rgba(224,33,138,0.18); transform:scale(1.03) }
+.mute-btn:focus{ outline:2px solid rgba(224,33,138,0.14); outline-offset:3px }
+
+/* hidden until opening card is dismissed */
+.mute-btn.hidden{ opacity:0; transform:translateY(-6px) scale(.98); pointer-events:none }
+.mute-btn.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto }
+
+@media (max-width:640px){
+  .mute-btn{ top:12px; right:12px; width:44px; height:44px }
+  .mute-btn svg{ width:18px; height:18px }
+}
+
+/* ---- Parents & Event visual styles to match provided design ---- */
+.parents-section{ padding-top:3.5rem; padding-bottom:3.5rem }
+.parents-grid{ display:flex; justify-content:center; gap:6.5rem; max-width:980px; margin:0 auto }
+.parent-card{ background:transparent; box-shadow:none; border:0; padding:0; text-align:center }
+.parent-card .icon-wrap{ display:none }
+.parent-name{ font-family: 'Great Vibes', cursive; font-size:2.4rem; color:var(--barbie-dark-pink); margin:0 0 6px }
+.role{ font-size:0.75rem; letter-spacing:0.28em; color:#d8b7c6; margin-bottom:8px; text-transform:uppercase }
+.parent-parents{ color:#6b6067; font-size:1rem; line-height:1.9; margin-top:6px }
+
+/* Event area: soft pink band and floating cards */
+.bg-magic-gradient{ background: linear-gradient(180deg, #fde9f2 0%, #f9dff0 40%, #fde9f2 100%); }
+.bg-magic-gradient .grid{ gap:2.25rem }
+.bg-magic-gradient .glass-morphism{ background: #fff; border-radius:18px; padding:2.5rem; border:2px solid rgba(224,33,138,0.12); box-shadow:0 10px 30px rgba(224,33,138,0.06); transition:transform .28s ease, box-shadow .28s ease }
+.bg-magic-gradient .glass-morphism:hover{ transform:translateY(-8px); box-shadow:0 22px 50px rgba(224,33,138,0.12) }
+.bg-magic-gradient h3{ font-size:.75rem; color:var(--barbie-dark-pink); letter-spacing:.18em; font-weight:700 }
+.bg-magic-gradient .text-2xl.font-bold{ font-size:1.6rem; color:#2b2b2b }
+.bg-magic-gradient .font-serif-elegant{ color:#6b6067 }
+.bg-magic-gradient a.inline-flex{ background: linear-gradient(45deg,#e0218a,#ff6fa6); box-shadow:0 10px 30px rgba(224,33,138,0.12); }
+
+@media (max-width:900px){
+  .parents-grid{ flex-direction:column; align-items:center; gap:2rem }
+}
+
