@@ -67,17 +67,22 @@ document.addEventListener('DOMContentLoaded', function(){
             'music.mp3',
             'Barbie - 12 Dancing Princesses (Theme) [Audio]  Barbie in the 12 Dancing Princesses.mp3'
         ];
-        for(const name of candidates){
-            try{
-                const path = 'assets/music/' + encodeURIComponent(name);
-                const resp = await fetch(path, {method:'HEAD'});
-                if(resp.ok){
-                    ambientAudio = new Audio(path);
-                    ambientAudio.loop = true;
-                    if(!isMuted) await ambientAudio.play().catch(()=>{});
-                    return true;
-                }
-            }catch(e){ /* continue to next candidate */ }
+        // check both assets/music and assets/images directories (user may have placed MP3 in images)
+        const dirs = ['assets/music/', 'assets/images/'];
+        for(const name of candidates.concat(['Barbie.mp3'])){
+            for(const dir of dirs){
+                try{
+                    const path = dir + encodeURIComponent(name);
+                    const resp = await fetch(path, {method:'HEAD'});
+                    if(resp.ok){
+                        ambientAudio = new Audio(path);
+                        ambientAudio.loop = true;
+                        console.log('Found local audio:', path);
+                        if(!isMuted) await ambientAudio.play().catch(()=>{});
+                        return true;
+                    }
+                }catch(e){ /* continue to next candidate */ }
+            }
         }
         return false;
     }
@@ -121,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function unmuteAudio(){
         isMuted = false;
         try{
-            if(ambientAudio){ ambientAudio.play().catch(()=>{}); return; }
+            if(ambientAudio){ ambientAudio.play().catch(()=>{}); updateMuteButton(); return; }
             if(!audioCtx) synthPlayAmbient();
             else if(audioCtx && audioCtx._nodes && audioCtx._nodes.g){ audioCtx._nodes.g.gain.setValueAtTime(0.07, audioCtx.currentTime); }
         }catch(e){}
@@ -163,6 +168,11 @@ document.addEventListener('DOMContentLoaded', function(){
     const originalStart = window.startExperience;
     window.startExperience = async function(){
         originalStart();
+        // hide the opening sun/logo when opening the card
+        try{
+            const sun = document.querySelector('.opening-sun');
+            if(sun){ sun.classList.add('fade-out'); setTimeout(()=>{ try{ sun.style.display='none' }catch(e){} }, 700); }
+        }catch(e){}
         // try local mp3 first (only play if not muted)
         if(!isMuted){
             const ok = await tryPlayLocalAudio();
