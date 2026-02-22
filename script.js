@@ -181,11 +181,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
         // After the opening card hides, spawn hero decorations and show mute control
         setTimeout(()=>{
-            try{ createButterflies('hero-butterfly-container', 14); }catch(e){}
-            try{ createPixieDust('hero-pixie-container', 120); }catch(e){}
+            try{ createButterflies('hero-butterfly-container', 6); }catch(e){}
+            try{ createPixieDust('hero-pixie-container', 60); }catch(e){}
             try{
-                // add many continuous sparkles for a rich effect
-                for(let i=0;i<120;i++) createContinuousSparkle();
+                // add some continuous sparkles for a pleasant effect
+                for(let i=0;i<40;i++) createContinuousSparkle();
             }catch(e){}
             // show the mute control shortly after overlay dismissal
             setTimeout(()=>{ try{ showMuteButton(); }catch(e){} }, 220);
@@ -216,8 +216,8 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
 
-    // Initialize pixie dust inside opening card (increased density)
-    createPixieDust('pixie-container', 80);
+    // Initialize pixie dust inside opening card (reduced density)
+    createPixieDust('pixie-container', 30);
 
     // Try to locate a Barbie background image in assets/images and apply it
     async function setBarbieBackground(){
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Sparkle Logic
     const container = document.getElementById('magic-container');
-    const sparkleCount = 180; // increased density for richer effect
+    const sparkleCount = 80; // reduced density for performance
 
     function initSparkles(){
         for(let i=0;i<sparkleCount;i++) createContinuousSparkle();
@@ -311,10 +311,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     initSparkles();
-    // spawn butterflies and more pixie dust inside the opening card (increased)
-    createButterflies('butterfly-container', 12);
-    // add extra pixie particles for denser effect
-    createPixieDust('pixie-container', 80);
+    // spawn butterflies and more pixie dust inside the opening card (moderate)
+    createButterflies('butterfly-container', 6);
+    // add extra pixie particles
+    createPixieDust('pixie-container', 30);
 
     // Initialize lucide icons
     if(typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
