@@ -43,10 +43,34 @@ document.addEventListener('DOMContentLoaded', function(){
                 'playlist': 'yIzyS9yrgag'
             },
             events: {
-                'onReady': function() {}
+                'onReady': function() {
+                    // Ensure player respects current mute state
+                    try{ if(window.player && isMuted && window.player.mute) window.player.mute(); }catch(e){}
+                }
             }
         });
     };
+
+    // Try to play the YouTube track (returns true if playback requested)
+    async function tryPlayYouTube(){
+        if(isMuted) return false; // don't force-play when muted
+        // wait for player readiness (short timeout)
+        let attempts = 0;
+        while((!window.player || typeof window.player.playVideo !== 'function') && attempts < 25){
+            await new Promise(r=>setTimeout(r, 200));
+            attempts++;
+        }
+        if(window.player && typeof window.player.playVideo === 'function'){
+            try{
+                // unmute player when starting
+                if(window.player.unMute) try{ window.player.unMute(); }catch(e){}
+                window.player.playVideo();
+                console.log('Playing background audio from YouTube via player.');
+                return true;
+            }catch(e){ console.warn('YouTube play failed', e); return false; }
+        }
+        return false;
+    }
 
     // Start experience: hide overlay and play background audio if available
     window.startExperience = function() {
@@ -141,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function(){
         isMuted = true;
         try{ if(ambientAudio){ ambientAudio.pause(); } }catch(e){}
         try{ if(audioCtx && audioCtx._nodes && audioCtx._nodes.g){ audioCtx._nodes.g.gain.setValueAtTime(0, audioCtx.currentTime); } }catch(e){}
+        try{ if(window.player && window.player.mute) window.player.mute(); }catch(e){}
         updateMuteButton();
     }
 
@@ -151,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function(){
             if(!audioCtx) synthPlayAmbient();
             else if(audioCtx && audioCtx._nodes && audioCtx._nodes.g){ audioCtx._nodes.g.gain.setValueAtTime(0.07, audioCtx.currentTime); }
         }catch(e){}
+        try{ if(window.player && window.player.unMute) window.player.unMute(); }catch(e){}
         updateMuteButton();
     }
 
@@ -197,7 +223,11 @@ document.addEventListener('DOMContentLoaded', function(){
         // try local mp3 first (only play if not muted)
         if(!isMuted){
             const ok = await tryPlayLocalAudio();
-            if(!ok) synthPlayAmbient();
+            if(!ok){
+                // try YouTube (hosted) as a fallback, otherwise use synth
+                const ytOk = await tryPlayYouTube();
+                if(!ytOk) synthPlayAmbient();
+            }
         }
 
         // After the opening card hides, spawn hero decorations and show mute control
