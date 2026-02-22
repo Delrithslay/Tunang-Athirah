@@ -84,6 +84,27 @@ document.addEventListener('DOMContentLoaded', function(){
                 }catch(e){ /* continue to next candidate */ }
             }
         }
+
+        // If not found locally (or hosting changed paths), try raw.githubusercontent.com as a fallback
+        try{
+            const rawBase = 'https://raw.githubusercontent.com/Delrithslay/Tunang-Athirah/main/';
+            const rawDirs = ['assets/music/', 'assets/images/'];
+            for(const name of candidates.concat(['Barbie.mp3'])){
+                for(const dir of rawDirs){
+                    try{
+                        const path = rawBase + dir + encodeURIComponent(name);
+                        const resp = await fetch(path, {method:'HEAD'});
+                        if(resp.ok){
+                            ambientAudio = new Audio(path);
+                            ambientAudio.loop = true;
+                            console.log('Found remote audio via raw.githubusercontent:', path);
+                            if(!isMuted) await ambientAudio.play().catch(()=>{});
+                            return true;
+                        }
+                    }catch(e){ /* continue */ }
+                }
+            }
+        }catch(e){ /* ignore */ }
         return false;
     }
 
