@@ -87,48 +87,70 @@ document.addEventListener('DOMContentLoaded', function(){
     let isMuted = false;
 
     async function tryPlayLocalAudio(){
+        // Try playing audio by attempting to load sources directly (HEAD requests can be blocked by some hosts)
         const candidates = [
+            'Barbie.mp3',
             'music.mp3',
             'Barbie - 12 Dancing Princesses (Theme) [Audio]  Barbie in the 12 Dancing Princesses.mp3'
         ];
-        // check both assets/music and assets/images directories (user may have placed MP3 in images)
         const dirs = ['assets/music/', 'assets/images/'];
-        for(const name of candidates.concat(['Barbie.mp3'])){
-            for(const dir of dirs){
+
+        // Helper: try to create an Audio and detect whether it can play
+        function probeAudioPath(path){
+            return new Promise((resolve)=>{
                 try{
-                    const path = dir + encodeURIComponent(name);
-                    const resp = await fetch(path, {method:'HEAD'});
-                    if(resp.ok){
+                    const a = new Audio(path);
+                    a.loop = true;
+                    let finished = false;
+                    const clean = (ok) => { if(finished) return; finished = true; try{ a.pause(); }catch(e){} resolve(ok); };
+                    const onCan = async ()=>{ clean(true); };
+                    a.addEventListener('canplaythrough', onCan, {once:true});
+                    a.addEventListener('error', ()=>{ clean(false); }, {once:true});
+                    // timeout fallback
+                    setTimeout(()=>{ clean(false); }, 3000);
+                    // start loading
+                    a.load();
+                }catch(e){ resolve(false); }
+            });
+        }
+
+        // First try local relative paths (do NOT encode names here)
+        for(const name of candidates){
+            for(const dir of dirs){
+                const path = dir + name;
+                try{
+                    const ok = await probeAudioPath(path);
+                    if(ok){
                         ambientAudio = new Audio(path);
                         ambientAudio.loop = true;
-                        console.log('Found local audio:', path);
-                        if(!isMuted) await ambientAudio.play().catch(()=>{});
+                        console.log('Found local audio (direct):', path);
+                        if(!isMuted) ambientAudio.play().catch(()=>{});
                         return true;
                     }
-                }catch(e){ /* continue to next candidate */ }
+                }catch(e){ /* continue */ }
             }
         }
 
-        // If not found locally (or hosting changed paths), try raw.githubusercontent.com as a fallback
+        // Then try raw.githubusercontent fallback (encode name for URL safety)
         try{
             const rawBase = 'https://raw.githubusercontent.com/Delrithslay/Tunang-Athirah/main/';
-            const rawDirs = ['assets/music/', 'assets/images/'];
-            for(const name of candidates.concat(['Barbie.mp3'])){
-                for(const dir of rawDirs){
+            for(const name of candidates){
+                for(const dir of dirs){
+                    const path = rawBase + dir + encodeURIComponent(name);
                     try{
-                        const path = rawBase + dir + encodeURIComponent(name);
-                        const resp = await fetch(path, {method:'HEAD'});
-                        if(resp.ok){
+                        const ok = await probeAudioPath(path);
+                        if(ok){
                             ambientAudio = new Audio(path);
                             ambientAudio.loop = true;
                             console.log('Found remote audio via raw.githubusercontent:', path);
-                            if(!isMuted) await ambientAudio.play().catch(()=>{});
+                            if(!isMuted) ambientAudio.play().catch(()=>{});
                             return true;
                         }
                     }catch(e){ /* continue */ }
                 }
             }
         }catch(e){ /* ignore */ }
+
         return false;
     }
 
