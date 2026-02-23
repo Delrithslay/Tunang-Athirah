@@ -139,21 +139,47 @@ h1.font-script{ font-size: 4rem !important; }
   .font-serif-elegant{ font-size: 1rem; }
 }
 
-/* Opening-pin (black circle) placed at top center of opening card */
-.opening-sun{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:46px; height:46px; z-index:60; display:flex; align-items:center; justify-content:center; pointer-events:none }
-.opening-sun svg{ filter: drop-shadow(0 8px 18px rgba(224,33,138,0.08)); border-radius:50%; transition:transform .5s ease }
+/* Opening sun/pin removed: keep top-center clean */
+.opening-sun{ display:none !important }
 
-/* subtle pulse to match opening logo feel */
-.opening-sun.pulse svg{ animation: sun-pulse 2.6s ease-in-out infinite }
-@keyframes sun-pulse{ 0%{ transform:scale(1) } 50%{ transform:scale(1.06) } 100%{ transform:scale(1) } }
+/* Subtle gold ring that sits at top-center of the opening card and masks underlying dot */
+.opening-ring{ position:absolute; top:8px; left:50%; transform:translateX(-50%); width:56px; height:56px; z-index:60; display:flex; align-items:center; justify-content:center; pointer-events:none }
+.opening-ring svg{ filter: drop-shadow(0 6px 14px rgba(212,175,55,0.12)); border-radius:50%; transition:transform .35s ease }
+.opening-ring.small { width:46px; height:46px }
 
 @media (max-width:640px){
-  .opening-sun{ width:40px; height:40px; top:10px }
-  .opening-sun svg{ width:40px; height:40px }
+  .opening-ring{ width:46px; height:46px; top:6px }
+  .opening-ring svg{ width:46px; height:46px }
 }
 
-/* fade-out helper for opening sun when card is opened */
-.opening-sun.fade-out{ opacity:0; transform: translateY(-8px) scale(.96); transition: opacity .6s ease, transform .6s ease }
+/* Monogram that replaces the top dot */
+.opening-monogram{
+  position:absolute;
+  top:34px; /* move slightly lower inside card so it sits above heading area without overlapping */
+  left:50%;
+  transform:translateX(-50%);
+  width:120px;
+  height:120px;
+  z-index:14; /* behind heading/button which have higher z-index */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  background: transparent; /* watermark style */
+  border-radius:50%;
+  border: none;
+  color: rgba(212,175,55,0.14);
+  font-family: 'Great Vibes', cursive;
+  font-size:36px;
+  letter-spacing:1px;
+  opacity:0.14;
+  mix-blend-mode: multiply;
+}
+.opening-monogram.small{ width:92px; height:92px; font-size:28px }
+
+@media (max-width:640px){
+  .opening-monogram{ top:30px; width:96px; height:96px; font-size:26px }
+}
 
 /* Mute button */
 .mute-btn{ position:fixed; top:18px; right:18px; z-index:3000; background: linear-gradient(180deg,#ffffffee,#fff0f6); border:1px solid rgba(224,33,138,0.06); color:var(--barbie-dark-pink); padding:10px; width:48px; height:48px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 8px 30px rgba(224,33,138,0.08); cursor:pointer; transition:all .28s ease }
